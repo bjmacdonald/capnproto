@@ -229,7 +229,7 @@ public:
 
 class NeverDonePromiseNode final: public _::PromiseNode {
 public:
-  void destroy() override { dtor(*this); }
+  void destroy() override {}
 
   void onReady(_::Event* event) noexcept override {
     // ignore
@@ -2099,7 +2099,8 @@ OwnPromiseNode readyNow() {
 }
 
 OwnPromiseNode neverDone() {
-  return allocPromise<NeverDonePromiseNode>();
+  static NeverDonePromiseNode NODE;
+  return OwnPromiseNode(&NODE);
 }
 
 void NeverDone::wait(WaitScope& waitScope, SourceLocation location) const {
