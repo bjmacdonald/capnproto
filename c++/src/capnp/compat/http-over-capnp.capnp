@@ -24,7 +24,9 @@
 
 using import "byte-stream.capnp".ByteStream;
 
-$import "/capnp/c++.capnp".namespace("capnp");
+using Cxx = import "/capnp/c++.capnp";
+$Cxx.namespace("capnp");
+$Cxx.allowCancellation;
 
 interface HttpService {
   request @1 (request :HttpRequest, context :ClientRequestContext)
@@ -57,6 +59,15 @@ interface HttpService {
   #   `HttpOverCapnpFactory` will continue to support both methods. Use the `peerOptimizationLevel`
   #   constructor parameter to specify which method to use, for backwards-compatibiltiy purposes.
 
+  connect @2 (host :Text, headers :List(HttpHeader), down :ByteStream,
+              context :ConnectClientRequestContext) -> (up :ByteStream);
+  # Setup an HTTP CONNECT proxy tunnel.
+  #
+  # The client sends the request host/headers together with a `down` ByteStream that will be used
+  # for communication across the tunnel. The server will respond with the other side of that
+  # ByteStream for two-way communication. The `context` includes callbacks which are used to
+  # supply the client with headers.
+
   interface ClientRequestContext {
     # Provides callbacks for the server to send the response.
 
@@ -72,6 +83,17 @@ interface HttpService {
     #
     # Client -> Server WebSocket frames will be sent via method calls on `upSocket`, while
     # Server -> Client will be sent as calls to `downSocket`.
+  }
+
+  interface ConnectClientRequestContext {
+    # Provides callbacks for the server to send the response.
+
+    startConnect @0 (response :HttpResponse);
+    # Server calls this method to let the client know that the CONNECT request has been
+    # accepted. It also includes status code and header information.
+
+    startError @1 (response :HttpResponse) -> (body :ByteStream);
+    # Server calls this method to let the client know that the CONNECT request has been rejected.
   }
 
   interface ServerRequestContext {
