@@ -85,3 +85,4 @@ bazel-*
 
 # build folders
 cmake-build-*
+build/*

@@ -202,7 +202,8 @@ if(WITH_OPENSSL)
     target_link_libraries(kj-tls PUBLIC kj-async)
 
     target_compile_definitions(kj-tls PRIVATE KJ_HAS_OPENSSL)
-    target_link_libraries(kj-tls PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+    # BMD Must be PUBLIC so header folders are propagated up properly.
+    target_link_libraries(kj-tls PUBLIC OpenSSL::SSL OpenSSL::Crypto)
 
     # Ensure the library has a version set to match autotools build
     set_target_properties(kj-tls PROPERTIES VERSION ${VERSION})
