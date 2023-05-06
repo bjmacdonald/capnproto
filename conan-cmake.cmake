@@ -31,7 +31,7 @@ foreach(CONAN_BUILD_TYPE IN LISTS CONAN_BUILD_TYPES)
                     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 
     if(NOT "${return_code}" STREQUAL "0")
-        message(FATAL_ERROR "Conan install failed='${return_code}'")
+        message(FATAL_ERROR "Conan install failed rc='${return_code}'")
     endif()
 endforeach()
 
