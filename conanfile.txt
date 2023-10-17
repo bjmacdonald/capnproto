@@ -1,0 +1,7 @@
+[generators]
+cmake_paths
+cmake_find_package_multi
+
+[requires]
+openssl/1.1.1k
+zlib/1.2.13@ct/ct
