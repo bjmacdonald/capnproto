@@ -82,6 +82,7 @@
 
 # bazel output
 bazel-*
+/c++/MODULE.bazel.lock
 
 # build folders
 cmake-build-*
